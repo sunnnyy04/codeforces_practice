@@ -3,38 +3,42 @@ using namespace std;
 
 int ans;
 
-void func(int prev, vector<int>& p) {
-    if (prev == p[p[prev]]) {
-        return;
+void func(){
+    int n;
+    cin >> n;
+    vector<int> p(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> p[i];
     }
-    if (p[p[p[prev]]] ==prev) {
-        swap(p[prev], p[p[prev]]);
-        ans++;
-    } else {
-        func(p[prev], p);
-    }
+ 
+    int ans = 0;
+    vector<int> chk(n + 1, 0);
+    for (int i = 1; i <= n; i++) {
+        if (chk[i])
+            continue;
+ 
+        int j = p[i];
+        int cnt = 1;
+        while (j != i) {
+            chk[j] = 1;
+            j = p[j];
+            cnt++;
+        }
+        chk[i] = 1;
+ 
+        if (cnt <= 2)
+            continue;
+        ans += (cnt - 1) / 2;
+    } 
+ 
+    cout << ans << '\n';
 }
 
 int main() {
     int t;
     cin >> t;
     while (t--) {
-        int n;
-        cin >> n;
-        vector<int> p(n);
-        for (int i = 0; i < n; i++) {
-            cin >> p[i];
-        }
-        
-        ans = 0;  // Reset ans for each test case
-        
-        for (int i = 0; i < n; i++) {
-            if (i != p[i] && i != p[p[i]]) {
-                func(i, p);
-            }
-        }
-        
-        cout << ans << endl;  // Output the result for each test case
+        func();
     }
     
     return 0;
